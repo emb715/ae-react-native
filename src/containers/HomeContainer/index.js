@@ -17,7 +17,11 @@ export interface State {}
 
 class HomeContainer extends React.Component<Props, State> {
   static navigationOptions = {
-    header: null,
+    title: 'Gallery App',
+    headerStyle: {
+      backgroundColor: '#3e62ad',
+    },
+    headerTintColor: '#fff',
   }
 
   constructor (props) {
@@ -37,7 +41,11 @@ class HomeContainer extends React.Component<Props, State> {
   }
 
   onLoadNext (): void {
-    // TODO: implement me
+    const { fetchPictures, page, hasMore } = this.props;
+    if (hasMore) {
+    const nextPage = page + 1;
+    fetchPictures(nextPage);
+    }
   }
 
   render () {
@@ -57,6 +65,7 @@ const mapStateToProps = state => ({
   pictures: state.homeReducer.pictures,
   page: state.homeReducer.page,
   isLoading: state.homeReducer.isLoading,
+  hasMore: state.homeReducer.hasMore,
 })
 
 export default connect(mapStateToProps, bindAction)(HomeContainer)

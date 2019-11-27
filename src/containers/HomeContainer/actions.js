@@ -1,5 +1,5 @@
-import { getPictures } from '../../services/500pxAPI'
-import type { ActionWithPayload, ActionWithoutPayload } from '../../types/actions'
+import { getPictures } from '../../services/API';
+import type { ActionWithPayload, ActionWithoutPayload } from '../../types/actions';
 
 export const PICTURES_FETCH_REQUESTED = 'PICTURES_FETCH_REQUESTED'
 export const PICTURES_FETCH_SUCCESS = 'PICTURES_FETCH_SUCCESS'
@@ -11,20 +11,36 @@ export function listIsLoading (): ActionWithoutPayload {
   }
 }
 
-export function fetchListSuccess (pictures: Array<Object>, page: number): ActionWithPayload {
+export function fetchListSuccess (pictures: Array<Object>, page: number, hasMore: boolean): ActionWithPayload {
   return {
-    // TODO: implement me
+    type: PICTURES_FETCH_SUCCESS,
+    payload: {
+      pictures,
+      page,
+      hasMore,
+    }
   }
 }
 
 export function fetchListFailed (errorMessage: string): ActionWithPayload {
   return {
-    // TODO: implement me
+    type: PICTURES_FETCH_REQUESTED,
+    payload: {
+      errorMessage,
+    }
   }
 }
 
 export function fetchPictures (page: number = 1) {
   return async dispatch => {
-    // TODO: implement me
+    dispatch(listIsLoading());
+    const response = await getPictures(page);
+    if (response.status === 200) {
+      const { pictures, page, hasMore } = response || {};
+      dispatch(fetchListSuccess(pictures, page, hasMore));
+    } else {
+      const { errorMessage } =  response || {};
+      dispatch(fetchListFailed(errorMessage));
+    }
   }
 }

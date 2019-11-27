@@ -67,7 +67,7 @@ class HomeView extends React.PureComponent<Props> {
         renderItem={this._renderPicture}
         keyExtractor={(item) => keyExtractor(item, page)}
         onEndReached={onLoadNext}
-        onEndThreshold={2}
+        onEndThreshold={4}
       />
     </View>
   }

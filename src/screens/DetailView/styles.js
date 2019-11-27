@@ -13,7 +13,6 @@ const styles: any = StyleSheet.create({
     alignItems: 'center',
   },
   imageStyle: {
-    flex: 1,
     width: width * 0.9,
     height: width * 0.9,
   },
@@ -24,6 +23,21 @@ const styles: any = StyleSheet.create({
   },
   spinner: {
     position: 'absolute',
+  },
+  detailViewInfo: {
+    position: 'absolute',
+    bottom: 10,
+    left: 10,
+    flexDirection: 'column',
+  },
+  detailViewInfo__author: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  detailViewInfo__camera: {
+    fontSize: 20,
+    color: '#fff',
   },
   detailView: {
     position: 'absolute',

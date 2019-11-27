@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react'
+import { Share } from 'react-native';
 import DetailView from '../../screens/DetailView'
 import { connect } from 'react-redux'
 import { fetchPictureDetails } from './actions'
@@ -37,8 +38,18 @@ class DetailViewContainer extends React.Component<Props, State> {
     }
   }
 
-  share = (imageId: number): void => {
-    // TODO: implement share function
+  share = async (imageId: number): void => {
+    try {
+      const { hiResImage } = this.props;
+      const { full_picture, author, camera } = hiResImage(imageId) || {};
+      await Share.share({
+        title: `Share image from the author: ${author}`,
+        message: `This image was taken with a ${camera} camera.`,
+        url: full_picture,
+      });
+    } catch (error) {
+			console.log("​Share error", error);
+    }
   }
 
   applyFilter = (type): void => {
@@ -46,9 +57,18 @@ class DetailViewContainer extends React.Component<Props, State> {
   }
 
   render () {
-    const { pictureDetails } = this.props.navigation.state.params
-    const imageURL = pictureDetails.full_picture
-    const { isLoading, hiResImage } = this.props
+    let { pictureDetails } = this.props.navigation.state.params
+    // const imageURL = pictureDetails.cropped_picture
+    const { isLoading, hiResImage } = this.props;
+    const { id: imageId } = pictureDetails || {};
+    const { full_picture, author, camera } = hiResImage(imageId) || {};
+    pictureDetails = {
+      ...pictureDetails,
+      full_picture,
+      author,
+      camera,
+    };
+    const imageURL = pictureDetails.full_picture;
     return <DetailView
       imageUrl={imageURL}
       pictureDetails={pictureDetails}
